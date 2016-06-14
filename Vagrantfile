@@ -27,6 +27,9 @@ Vagrant.configure(2) do |config|
       apt-get install -y packaging-dev maven nodejs ruby-dev gcc make
 
       gem install fpm
+
+      rm /usr/share/maven/lib/commons-lang.jar
+      ln -s /usr/share/java/commons-lang.jar /usr/share/maven/lib/commons-lang.jar
     SCRIPT
 
     bootstrap.privileged = true
