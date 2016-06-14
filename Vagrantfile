@@ -35,28 +35,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell" do |compile|
     @script = <<-SCRIPT
-      git clone https://github.com/vadio/chronos.git /vagrant/chronos --branch 2.4.1
-
-      cd /vagrant/chronos && mvn package -DskipTests=true && cd /vagrant
-
-      rm -rf /vagrant/build
-      cp -rf /vagrant/src /vagrant/build
-
-      cat /vagrant/chronos/target/chronos-2.4.1.jar >> /vagrant/build/usr/bin/chronos
-
-      fpm -s dir \
-        -t deb \
-        -C /vagrant/build/ \
-        --name chronos \
-        --after-install /vagrant/build/postinst \
-        --after-remove /vagrant/build/postrm \
-        --version 2.4.1-0.1.20160601000000.ubuntu1404 \
-        --url https://github.com/vadio/chronos \
-        --description "Fault tolerant job scheduler for Mesos which handles dependencies and ISO8601 based schedules" --vendor "Mesosphere, Inc." \
-        --license "Apache-2.0" \
-        --maintainer "Suhas Gaddam <suhasg@vadio.com>" \
-        --depends "java8-runtime-headless | java7-runtime-headless | java6-runtime-headless, lsb-release" \
-        etc usr
+      git clone https://github.com/vadio/chronos-pkg.git /vagrant/chronos-pkg --branch 2.4.2
+      cd /vagrant/chronos-pkg && git submodule init && git submodule update && cd ~vagrant
+      cd /vagrant/chronos-pkg && make PKG_REL=0.1.20160614000000 deb
     SCRIPT
 
     compile.inline = @script

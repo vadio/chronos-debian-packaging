@@ -1,3 +1,4 @@
 .vagrant/
 chronos
+chronos-pkg
 *.deb
